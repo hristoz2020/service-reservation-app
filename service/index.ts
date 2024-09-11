@@ -1,7 +1,5 @@
-const express = require("express");
-const mongoose = require("mongoose");
-
-start();
+import express, { Request, Response } from "express";
+import mongoose from "mongoose";
 
 async function start() {
 	try {
@@ -15,9 +13,11 @@ async function start() {
 	const app = express();
 	app.use(express.json());
 
-	app.get("/", (req, res) =>
-		res.json({ message: "REST service operational" })
-	);
+	app.get("/", (req: Request, res: Response) => {
+		res.json({ message: "REST service operational" });
+	});
 
 	app.listen(8000, () => console.log("REST service started on port 8000"));
 }
+
+start();
