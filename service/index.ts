@@ -1,5 +1,8 @@
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
+import userRoutes from './src/routes/userRoutes';
+
+const PORT = process.env.PORT || 8000;
 
 async function start() {
 	try {
@@ -13,11 +16,13 @@ async function start() {
 	const app = express();
 	app.use(express.json());
 
+	app.use('/api/users', userRoutes);
+
 	app.get("/", (req: Request, res: Response) => {
 		res.json({ message: "REST service operational" });
 	});
 
-	app.listen(8000, () => console.log("REST service started on port 8000"));
+	app.listen(PORT, () => console.log("REST service started on port 8000"));
 }
 
 start();
