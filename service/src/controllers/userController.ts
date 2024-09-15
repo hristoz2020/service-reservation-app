@@ -48,3 +48,19 @@ export const loginUser = async (req: Request, res: Response) => {
 		res.status(400).json({ message: error });
 	}
 };
+
+export const logoutUser = (req: Request, res: Response) => {
+	const token = req.headers.authorization?.split(" ")[1];
+
+	if (!token) {
+		return res.status(401).json({ message: "No token provided" });
+	}
+
+	try {
+		logout(token);
+		res.status(204).end();
+	} catch (err: unknown) {
+		const error = mapErrors(err);
+		res.status(400).json({ message: error });
+	}
+};
