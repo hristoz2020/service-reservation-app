@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { createUser } from "../services/userService";
+import { create, login, logout } from "../services/userService";
+import { mapErrors } from "../utils/mappers";
 
 export const registerUser = async (req: Request, res: Response) => {
 	const { firstName, lastName, email, password, confirmPassword } = req.body;
@@ -26,9 +27,24 @@ export const registerUser = async (req: Request, res: Response) => {
 	}
 
 	try {
-		const user = await createUser({ firstName, lastName, email, password });
+		const user = await create({ firstName, lastName, email, password });
 		res.status(201).json({ message: "User registered successfully", user });
 	} catch (error) {
 		res.status(500).json({ message: "Error registering user", error });
+	}
+};
+
+export const loginUser = async (req: Request, res: Response) => {
+	const { email, password } = req.body;
+
+	try {
+		const result = await login(email.trim().toLowerCase(), password.trim());
+		res.json(result);
+	} catch (err: unknown) {
+		if (err instanceof Error) {
+			console.error(err.message);
+		}
+		const error = mapErrors(err);
+		res.status(400).json({ message: error });
 	}
 };
