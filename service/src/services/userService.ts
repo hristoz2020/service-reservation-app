@@ -12,7 +12,7 @@ interface UserInput {
 	password: string;
 }
 
-interface TokenPayload extends JwtPayload {
+export interface TokenPayload extends JwtPayload {
     email: string;
     _id: string;
 }

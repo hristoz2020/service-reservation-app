@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
+import { authMiddleware } from "./src/middlewares/auth";
+import { corsMiddleware } from "./src/middlewares/cors";
 import userRoutes from './src/routes/userRoutes';
 
 const PORT = process.env.PORT || 8000;
@@ -15,6 +17,8 @@ async function start() {
 
 	const app = express();
 	app.use(express.json());
+	app.use(corsMiddleware());
+	app.use(authMiddleware());
 
 	app.use('/api/users', userRoutes);
 
