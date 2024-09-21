@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { registerUser } from "../services/registerUser";
 
 const Register = () => {
 	const [formData, setFormData] = useState({
@@ -8,14 +9,25 @@ const Register = () => {
 		password: "",
 		confirmPassword: "",
 	});
+	const [serverMessage, setServerMessage] = useState<string | null>(null);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setFormData({ ...formData, [name]: value });
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+
+		const data = await registerUser(formData);
+		setServerMessage(data.errors);
+		setFormData({
+			firstName: "",
+			lastName: "",
+			email: "",
+			password: "",
+			confirmPassword: "",
+		});
 	};
 
 	return (
@@ -76,6 +88,7 @@ const Register = () => {
 					onChange={handleInputChange}
 				/>
 			</div>
+			{serverMessage?.length > 0 && <p>{serverMessage}</p>}
 			<button type="submit">Register</button>
 		</form>
 	);
