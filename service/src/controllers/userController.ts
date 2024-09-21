@@ -4,26 +4,16 @@ import { mapErrors } from "../utils/mappers";
 
 export const registerUser = async (req: Request, res: Response) => {
 	const { firstName, lastName, email, password, confirmPassword } = req.body;
+	const errors: { [key: string]: string } = {};
 
-	const errors: string[] = [];
-
-	if (!firstName) {
-		errors.push("First name is required");
-	}
-	if (!lastName) {
-		errors.push("Last name is required");
-	}
-	if (!email || !/\S+@\S+\.\S+/.test(email)) {
-		errors.push("Invalid email");
-	}
-	if (!password || password.length < 6) {
-		errors.push("Password must be at least 6 characters long");
-	}
-	if (errors.length > 0) {
+	!firstName ? errors.firstName = "First name is required" : null;
+	!lastName ? errors.lastName = "Last name is required" : null;
+	!email || !/\S+@\S+\.\S+/.test(email) ? errors.email = "Invalid email" : null;
+	!password || password.length < 6 ? errors.password = "Password must be at least 6 characters long" : null;
+	password !== confirmPassword ? errors.password = "Passwords must match" : null;
+	
+	if (Object.keys(errors).length > 0) {
 		return res.status(400).json({ errors });
-	}
-	if (password !== confirmPassword) {
-		errors.push("Passwords must match");
 	}
 
 	try {
