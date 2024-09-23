@@ -1,3 +1,5 @@
+import { BASE_URL, REGISTER } from "./config";
+
 export interface FormData {
 	firstName: string;
 	lastName: string;
@@ -8,16 +10,13 @@ export interface FormData {
 
 export const registerUser = async (formData: FormData) => {
 	try {
-		const response = await fetch(
-			"http://localhost:8000/api/users/register",
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(formData),
-			}
-		);
+		const response = await fetch(BASE_URL + REGISTER, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(formData),
+		});
 
 		const data = await response.json();
 
